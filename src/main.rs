@@ -36,10 +36,21 @@ fn get_git_repo_from_remotes(git_remotes: String) -> Vec<String> {
     return captures;
 }
 
+fn get_git_root() -> String {
+    // git rev-parse --show-toplevel
+    let output = Command::new("git").arg("rev-parse").arg("--show-toplevel").output();
+    let unwrapped_output = output.unwrap();
+
+    return String::from(String::from_utf8_lossy(&unwrapped_output.stdout));
+}
+
 fn main() {
     let git_remotes = get_git_remotes();
     println!("git remotes: {}", git_remotes);
 
     let git_repos = get_git_repo_from_remotes(git_remotes);
     println!("The captured repo names are: {:?}", git_repos);
+
+    let git_root = get_git_root();
+    println!("The git root is: {}", git_root);
 }
