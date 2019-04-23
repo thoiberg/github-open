@@ -8,6 +8,8 @@
 
 use std::process::Command;
 
+// TODO: Return a Result instead
+// Check if the status is successful then either return Ok with the String or Err
 fn get_git_remotes() -> String {
     let output = Command::new("git").arg("remote").arg("-v").output();
     let unwrapped_output = output.unwrap();
