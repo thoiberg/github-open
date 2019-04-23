@@ -23,19 +23,23 @@ fn get_git_remotes() -> String {
     return String::from(String::from_utf8_lossy(&unwrapped_output.stdout));
 }
 
-fn main() {
-    let git_remotes = get_git_remotes();
-    println!("git remotes: {}", git_remotes);
-
+fn get_git_repo_from_remotes(git_remotes: String) -> Vec<String> {
     // origin	git@github.com:thoiberg/github-open.git (fetch)
     // origin	git@github.com:thoiberg/github-open.git (push)
+
     let re = Regex::new(r".+:(.+)\.git").unwrap();
     let mut captures: Vec<String> = Vec::new();
     for cap in re.captures_iter(&git_remotes[..]) {
         captures.push(String::from(&cap[1]));
-        println!("the repo name is: {}", &cap[1]);
-    }
+    };
 
-    println!("The captured repo names are: {:?}", captures);
+    return captures;
+}
 
+fn main() {
+    let git_remotes = get_git_remotes();
+    println!("git remotes: {}", git_remotes);
+
+    let git_repos = get_git_repo_from_remotes(git_remotes);
+    println!("The captured repo names are: {:?}", git_repos);
 }
