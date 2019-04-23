@@ -8,8 +8,8 @@
 
 extern crate regex;
 
-use std::process::Command;
 use regex::Regex;
+use std::process::Command;
 
 // TODO: Return a Result instead
 // Check if the status is successful then either return Ok with the String or Err
@@ -31,14 +31,17 @@ fn get_git_repo_from_remotes(git_remotes: String) -> Vec<String> {
     let mut captures: Vec<String> = Vec::new();
     for cap in re.captures_iter(&git_remotes[..]) {
         captures.push(String::from(&cap[1]));
-    };
+    }
 
     return captures;
 }
 
 fn get_git_root() -> String {
     // git rev-parse --show-toplevel
-    let output = Command::new("git").arg("rev-parse").arg("--show-toplevel").output();
+    let output = Command::new("git")
+        .arg("rev-parse")
+        .arg("--show-toplevel")
+        .output();
     let unwrapped_output = output.unwrap();
 
     return String::from(String::from_utf8_lossy(&unwrapped_output.stdout));
