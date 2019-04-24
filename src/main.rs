@@ -10,6 +10,7 @@ extern crate regex;
 
 use regex::Regex;
 use std::env;
+use std::path::Path;
 use std::process::Command;
 
 // TODO: Return a Result instead
@@ -40,11 +41,6 @@ fn get_git_repo_from_remotes(git_remotes: String) -> Vec<String> {
 }
 
 fn get_git_root() -> String {
-    // TODO: add graceful handling to deal with the wrong amount/type of args being passed in
-    let args: Vec<String> = env::args().collect();
-    println!("args: {:?}", args);
-    println!("filename: {}", args[1]);
-    let file_path = &args[1];
     // git rev-parse --show-toplevel
     let output = Command::new("git")
         .arg("rev-parse")
@@ -56,6 +52,16 @@ fn get_git_root() -> String {
 }
 
 fn main() {
+    // TODO: add graceful handling to deal with the wrong amount/type of args being passed in
+    let args: Vec<String> = env::args().collect();
+    println!("args: {:?}", args);
+    println!("filename arg: {}", args[1]);
+    let file_path = Path::new(&args[1]);
+    // TODO: check if file exists, if not print and exit with non-zero code
+    // TODO: implement proper handling of Err result
+    let full_file_path = file_path.canonicalize().unwrap();
+    println!("full_file_path: {:?}", full_file_path);
+
     let git_remotes = get_git_remotes();
     println!("git remotes: {}", git_remotes);
 
