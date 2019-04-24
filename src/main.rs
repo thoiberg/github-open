@@ -70,4 +70,17 @@ fn main() {
 
     let git_root = get_git_root();
     println!("The git root is: {}", git_root);
+
+    // Example output:
+    // https://github.com/thoiberg/github-open/blob/master/src/main.rs
+    let full_file_string = full_file_path.to_str().unwrap();
+    let repo_relative_path = full_file_string.replace(&git_root[..].trim(), "");
+    println!("relative path: {}", repo_relative_path);
+
+    let mut github_link = String::from("https://github.com/");
+    github_link.push_str(&git_repos[0][..]);
+    github_link.push_str("/blob/master");
+    github_link.push_str(&repo_relative_path[..]);
+
+    println!("github_link: {}", github_link);
 }
