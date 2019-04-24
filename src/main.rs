@@ -9,6 +9,7 @@
 extern crate regex;
 
 use regex::Regex;
+use std::env;
 use std::process::Command;
 
 // TODO: Return a Result instead
@@ -23,6 +24,8 @@ fn get_git_remotes() -> String {
     return String::from(String::from_utf8_lossy(&unwrapped_output.stdout));
 }
 
+// TODO: Return a Result instead
+// Check if the status is successful then either return Ok with the String or Err
 fn get_git_repo_from_remotes(git_remotes: String) -> Vec<String> {
     // origin	git@github.com:thoiberg/github-open.git (fetch)
     // origin	git@github.com:thoiberg/github-open.git (push)
@@ -37,6 +40,11 @@ fn get_git_repo_from_remotes(git_remotes: String) -> Vec<String> {
 }
 
 fn get_git_root() -> String {
+    // TODO: add graceful handling to deal with the wrong amount/type of args being passed in
+    let args: Vec<String> = env::args().collect();
+    println!("args: {:?}", args);
+    println!("filename: {}", args[1]);
+    let file_path = &args[1];
     // git rev-parse --show-toplevel
     let output = Command::new("git")
         .arg("rev-parse")
