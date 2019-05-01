@@ -19,7 +19,7 @@ fn main() {
     // TODO: implement proper handling of Err result
     let full_file_path = file_path.canonicalize().unwrap();
 
-    let git_remotes = get_git_remotes();
+    let git_remotes = get_git_remotes().unwrap();
 
     let git_repos = get_git_repo_from_remotes(git_remotes);
 
