@@ -18,9 +18,6 @@ use std::process::Command;
 fn get_git_remotes() -> String {
     let output = Command::new("git").arg("remote").arg("-v").output();
     let unwrapped_output = output.unwrap();
-    println!("output: {:?}", unwrapped_output);
-    println!("status: {}", unwrapped_output.status);
-    println!("was successful?: {}", unwrapped_output.status.success());
 
     return String::from(String::from_utf8_lossy(&unwrapped_output.stdout));
 }
@@ -54,28 +51,21 @@ fn get_git_root() -> String {
 fn main() {
     // TODO: add graceful handling to deal with the wrong amount/type of args being passed in
     let args: Vec<String> = env::args().collect();
-    println!("args: {:?}", args);
-    println!("filename arg: {}", args[1]);
     let file_path = Path::new(&args[1]);
     // TODO: check if file exists, if not print and exit with non-zero code
     // TODO: implement proper handling of Err result
     let full_file_path = file_path.canonicalize().unwrap();
-    println!("full_file_path: {:?}", full_file_path);
 
     let git_remotes = get_git_remotes();
-    println!("git remotes: {}", git_remotes);
 
     let git_repos = get_git_repo_from_remotes(git_remotes);
-    println!("The captured repo names are: {:?}", git_repos);
 
     let git_root = get_git_root();
-    println!("The git root is: {}", git_root);
 
     // Example output:
     // https://github.com/thoiberg/github-open/blob/master/src/main.rs
     let full_file_string = full_file_path.to_str().unwrap();
     let repo_relative_path = full_file_string.replace(&git_root[..].trim(), "");
-    println!("relative path: {}", repo_relative_path);
 
     let mut github_link = String::from("https://github.com/");
     github_link.push_str(&git_repos[0][..]);
