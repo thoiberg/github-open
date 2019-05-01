@@ -1,5 +1,5 @@
 [package]
-name = "github-open"
+name = "github_open"
 version = "0.1.0"
 authors = ["Tim Hoiberg <tim.hoiberg@envato.com>"]
 edition = "2018"
