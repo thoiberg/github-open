@@ -3,11 +3,17 @@ extern crate regex;
 use regex::Regex;
 use std::process::Command;
 
-// TODO: Return a Result instead
 // Check if the status is successful then either return Ok with the String or Err
 pub fn get_git_remotes() -> std::io::Result<String> {
     let output = Command::new("git").arg("remote").arg("-v").output();
     let unwrapped_output = output?;
+
+    if !unwrapped_output.status.success() {
+        return Err(std::io::Error::new(
+            std::io::ErrorKind::Other,
+            "unable to get github remotes",
+        ));
+    }
 
     Ok(String::from_utf8_lossy(&unwrapped_output.stdout).to_string())
 }
